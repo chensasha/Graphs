@@ -18,10 +18,12 @@ void matrix (int **p, int **arr, int v, int e) { //матрица смежнос
 void BFS (int v0, int v, int **g, bool *used) {
     queue <int> q;
     q.push(v0);
+    int t=0;
     while (!q.empty()) {
+        t=q.front();
         q.pop();
         for (int i=0; i<v; i++) {
-            if ((g[v][i]) && (!used[i])) {
+            if ((g[t][i]) && (!used[i])) {
                 used[i]=1;
                 q.push(i);
             }
