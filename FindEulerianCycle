@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void matrix1 (int **p, int **arr, int v, int e) {
+    for (int i=0; i<v; i++) { 
+        for (int j=0; j<v; j++) {
+            p[i][j]=0;
+        }
+    }
+    for (int i=0; i<e; i++) {
+        p[arr[i][0]-1][arr[i][1]-1]=1;
+        p[arr[i][1]-1][arr[i][0]-1]=1;
+    }
+}
+
+void FindEulerianCycle (int **g, int v, int e, vector < int > &cycle, int v0) {
+    for (int i=0; i<v; i++) {
+        if (g[v0][i]) {
+            g[v0][i]=0;
+            g[i][v0]=0;
+            FindEulerianCycle (g, v, e, cycle, i);
+        }
+    }
+    cycle.push_back(v0);
+}
+
+int main() {
+    int e, v;
+    cin>>e>>v;
+    int **arr=new int* [e];
+    for (int i=0; i<e; i++) {
+        arr[i]=new int [2];
+    }
+    for (int i=0; i<e; i++) {
+        cin>>arr[i][0]>>arr[i][1];
+    }
+     int **g=new int* [v]; //матрица смежности 
+    for (int i=0; i<v; i++) {
+        g[i]=new int [v];
+    }
+    matrix1 (g, arr, v, e);
+    int s=0;
+    for (int i=0; i<v; i++) {
+        for (int j=0; j<v; j++) {
+            s+=g[i][j];
+        }
+        if (s%2==0) {
+            s=0;
+        }
+        else {
+            break;
+        }
+    }
+    if (s!=0) {
+        cout<<"No Eulerian cycle";
+    }
+    else {
+        vector <int> cycle;
+        FindEulerianCycle (g, v, e, cycle, 0);
+        for (int i=0; i<cycle.size(); i++) {
+            cout<<cycle[i]+1<<" ";
+        }
+    }
+    return 0;
+}
