@@ -7,7 +7,7 @@ using namespace std;
 void matrix (int **g, int **arr, int v, int k) {
     int count=0;
     for (int w=0; w<v; w++) {
-        for (int i=0; i<v; i++) {
+        for (int i=w; i<v; i++) {
             for (int j=1; j<k-1; j++) {
                 if (arr[w][j]==arr[i][j-1]) {
                     count++;
