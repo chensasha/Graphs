@@ -76,11 +76,11 @@ int main() {
     }
     BFS(v, v1, v2, l, used, n); //поиск второго пути из v1 в v2
     for (int i=v2; i!=-1; i=n[i]) {
-	    path.push_back(i);
-	}
-	for (int i=path.size(); i!=-1; i--) {
-	    cout<<path[i]<<" ";
-	}
+	path.push_back(i);
+    }
+    for (int i=path.size(); i!=-1; i--) {
+	cout<<path[i]<<" ";
+    }
     return 0;
 }
 
