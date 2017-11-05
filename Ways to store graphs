@@ -39,28 +39,10 @@ void matrix2 (int **q, int **arr, int v, int e) {
     cout<<endl;
 }
 
-void list (int **l, int **p, int v, int max) {
-    int k=0;
-    int j=0;
-    for (int i=0; i<v; i++) {
-        while (k<v) {
-            if (p[i][k]==1) {
-                l[i][j]=k+1;
-                j++;
-            }
-            k++;
-        }
-        j=0;
-        k=0;
-    }
-    for (int i=0; i<v; i++) {
-        cout<<i+1<<":"<<" ";
-        for (int w=0; w<max; w++) {
-            if (l[i][w]!=0) {
-                cout<<l[i][w]<<" ";
-            }
-        }
-        cout<<endl;
+void list(int v, int **arr, vector<vector<int> >& l) {
+    for(int i=0; i<v; i++) {
+        l[arr[i][0]].push_back(arr[i][1]);
+        l[arr[i][1]].push_back(arr[i][0]);
     }
 }
 
@@ -85,26 +67,7 @@ int main()
         q[i]=new int [e];
     }
     matrix2 (q, arr, v, e);
-    int max=0;
-    int s=0;
-    for (int i=0; i<v; i++) {
-        for (int j=0; j<v; j++) {
-            s+=p[i][j];
-        }
-        if (max<s) {
-            max=s;
-        }
-        s=0;
-    }
-    int **l=new int* [v]; //список смежностей 
-    for (int i=0; i<v; i++) {
-        l[i]=new int [max];
-    }
-    for (int i=0; i<v; i++) {
-        for (int j=0; j<max; j++) {
-            l[i][j]=0;
-        }
-    }
-    list (l, p, v, max);
+    vector <vector <int>> l;
+    list (v, arr, l);
     return 0;
 }
