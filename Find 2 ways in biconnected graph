@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+void list(int v, int **a, vector <vector <int>>& l) {
+    for(int i=0; i<v; i++) {
+        l[a[i][0]].push_back(a[i][1]);
+        l[a[i][1]].push_back(a[i][0]);
+    }
+}
+
+void BFS (int v, int v1, int v2, vector <vector <int>> &list, bool *used, int *n, vector <int> &path) {
+    queue <int> q;
+    q.push(v1);
+    used[v1]=1;
+    n[v1]=-1;
+    while(!q.empty()) {
+        int t=q.front();
+        q.pop();
+        for(int i=0; i<list[t].size(); i++) {
+            if(!used[list[t][i]]) {
+                used[list[t][i]]=1;
+                q.push(list[t][i]);
+                n[list[t][i]]=t;
+            }
+        }
+    }
+}
+
+int main() {
+    int e,v; 
+    cin>>e>>v; //количество ребер и вершин
+    int v1, v2;
+    cin>>v1>>v2;
+    int **arr=new int* [e];
+    for (int i=0; i<e; i++) {
+        arr[i]=new int [2];
+    }
+    for (int i=0; i<e; i++) {
+        cin>>arr[i][0]>>arr[i][1];
+    }
+    vector <vector <int>> l;
+    list (v, arr, l);
+    vector <int> path;
+    bool *used=new bool[v];
+    int *n=new int [v];
+    for (int i=0; i<v; i++) {
+        used[i]=0;
+        n[i]=0;
+    }
+    BFS(v, v1, v2, l, used, n, path); //вывод первого пути из v1 в v2
+    for (int w=path.size(); w!=-1; w--) {
+        for (int i=0; i<v; i++) {
+            for (int j=0; j<l[i].size(); j++) {
+                if (l[i][j]==path[w] && l[i][j]!=v1 && l[i][j]!=v2) {
+                    l[i].erase(l[i].begin()+j);
+                }
+            }
+        }
+    }
+    for (int i=0; i<path.size(); i++) {
+        path[i]=0;
+    }
+    for (int i=0; i<v; i++) {
+        used[i]=0;
+        n[i]=0;
+    }
+    BFS(v, v1, v2, l, used, n, path); //вывод второго пути из v1 в v2
+    return 0;
+}
