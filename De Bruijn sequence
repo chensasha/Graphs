@@ -22,7 +22,22 @@ void matrix (int **g, int **arr, int v, int k) {
     }
 }
 
-void FindEulerianCycle (int **g, int v, int e, vector < int > &cycle, int v0) {
+void CreateArray (int j, int w, int k, int n, int **arr, int *temp) { 
+    if(j==k) { 
+        for(int i=0; i<k; i++) {
+            arr[w][i]=temp[i];
+            w++;
+        }
+    }
+    else { 
+        for(int i=-1; i<n; i++) { 
+            temp[j]=i+1; 
+            CreateArray (j+1, w, k, n, arr, temp);
+        }
+    } 
+} 
+
+void FindEulerianCycle (int **g, int v, int e, vector <int> &cycle, int v0) {
     for (int i=0; i<v; i++) {
         if (g[v0][i]!=0) {
             g[v0][i]--;
@@ -39,6 +54,7 @@ int main() {
     int v=pow(n, k-1);
     int e=pow(n, k);
     int **arr=new int* [v];
+    int *temp=new int [k];
     for (int i=0; i<v; i++) {
         arr[i]=new int [k-1];
     }
@@ -47,6 +63,10 @@ int main() {
             arr[i][j]=0;
         }
     }
+    for (int i=0; i<k; i++) {
+        temp[i]=0;
+    }
+    CreateArray (0, 0, k-1, n, arr, temp);
     int **g=new int* [v]; 
     for (int i=0; i<v; i++) {
         g[i]=new int [v];
