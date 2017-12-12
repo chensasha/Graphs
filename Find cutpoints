@@ -3,7 +3,11 @@
 
 using namespace std;
 
-void matrix1 (int **p, int **arr, int v, int e) {
+vector <int> arr_c;
+vector <vector<int>> arr_br;
+int k=0;
+
+void matrix (int **p, int **arr, int v, int e) {
     for (int i=0; i<v; i++) { 
         for (int j=0; j<v; j++) {
             p[i][j]=0;
@@ -15,7 +19,17 @@ void matrix1 (int **p, int **arr, int v, int e) {
     }
 }
 
-void DFS (int v0, int p=-1, int v, int **g, bool *used, int *f, int *t, int timer) {
+void add_c (int v0) {
+    arr_c.push_back (v0);
+}
+
+void add_br (int v0, int to) {
+    arr_br[k].push_back (v0);
+    arr_br[k].push_back (to);
+    k++;
+}
+
+void DFS_cutpoints (int v0, int p=-1, int v, int **g, bool *used, int *f, int *t, int timer) {
     int children=0;
     used [v0]=1;
     t[v0]=f[v0]=timer++;
@@ -32,17 +46,40 @@ void DFS (int v0, int p=-1, int v, int **g, bool *used, int *f, int *t, int time
                 dfs (to, v0, v, g, used, f, t, timer);
                 f[v0]=min(f[v0], f[to]);
                 if (f[to]>=t[v0] && p!=-1) {
-                    arr_c(v0);
+                    add_c (v0);
                     children++;
                 }
             }
         }
     }
     if (p==-1 && children>1) {
-        arr_c(v0);
+        add_c (v0);
     }
 }
     
+void DFS_bridges (int v0, int p=-1, int v, int **g, bool *used, int *f, int *t, int timer) {
+    used [v0]=1;
+    t[v0]=f[v0]=timer++;
+    for (int i=0; i<v; i++) {
+        if (g[v0][i]) {
+            int to=g[v0][i];
+            if (to==p) {
+                continue;
+            }
+            if (used[to]) {
+                f[v0]=min(t[to], f[v0]);
+            }
+            else {
+                dfs (to, v0, v, g, used, f, t, timer);
+                f[v0]=min(f[v0], f[to]);
+                if (f[to]>t[v0]) {
+                    add_br(v0, to);
+                }
+            }
+        }
+    }
+}
+
 int main() {
     int e,v; 
     cin>>e>>v; //количество ребер и вершин
@@ -59,7 +96,7 @@ int main() {
     for (int i=0; i<v; i++) {
         g[i]=new int [v];
     }
-    matrix1 (g, arr, v, e);
+    matrix (g, arr, v, e);
     bool *used=new bool [v];
     for (int i=0; i<v; i++) {
         used[i]=0;
@@ -67,6 +104,26 @@ int main() {
     int *f=new int [v];
     int *t=new int [v];
     int timer=0;
-    DFS (0, -1, v, g, used, f, t, timer);
+    DFS_cutpoints (0, -1, v, g, used, f, t, timer);
+    for (int i=0; i<v; i++) {
+        used[i]=0;
+        f[i]=0;
+        t[i]=0;
+        timer=0;
+    }
+    for (int i=0; i<v; i++) {
+        if (used[i]==0) {
+            DFS_bridges (i, -1, v, g, used, f, t, timer);
+        }
+    }
+    for (int i=0; i<arr_c.size(); i++) {
+        for (int j=0; j<k; j++) {
+            for (int w=0; w<1; w++) {
+                if (arr_c[i]!=arr_br[j][w] && arr_c[i]!=arr_br[j][w+1]) {
+                    cout<<arr_c[i]<<" ";
+                }
+            }
+        }
+    }
     return 0;
 }
