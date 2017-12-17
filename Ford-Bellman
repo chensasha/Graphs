@@ -1,0 +1,34 @@
+#include <iostream>
+
+using namespace std;
+
+const int inf=1000000;
+
+void Ford-Bellman (int v0, int v, int e, int **arr, int *cost) {
+    vector<int> p (v, INF);
+	  p[v0] = 0;
+	  for (int i=0; i<v-1; i++) {
+      for (int j=0; j<e; j++) {
+			  if (p[arr[j][0]]<inf) {
+				  p[arr[j][1]] = min (p[arr[j][0]], p[arr[j][0]] + cost[j]);
+			  }
+		  }
+	  }
+}
+
+int main() {
+    int e,v; 
+    cin>>e>>v; //количество ребер и вершин
+    int v1, v2;
+    cin>>v1>>v2;
+    int **arr=new int* [e];
+    for (int i=0; i<e; i++) {
+        arr[i]=new int [2];
+    }
+    int *cost=new int [e];
+    for (int i=0; i<e; i++) {
+        cin>>cost[i];
+    }
+    Ford-Bellman (0, v, e, arr, cost);
+    return 0;
+}
