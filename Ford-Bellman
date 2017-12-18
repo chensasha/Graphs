@@ -26,6 +26,9 @@ int main() {
     for (int i=0; i<e; i++) {
         arr[i]=new int [2];
     }
+    for (int i=0; i<e; i++) {
+        cin>>arr[i][0]>>arr[i][1];
+    }
     int *cost=new int [e];
     for (int i=0; i<e; i++) {
         cin>>cost[i];
