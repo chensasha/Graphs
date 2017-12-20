@@ -43,7 +43,7 @@ void DFS_cutpoints (int v0, int p=-1, int v, int **g, bool *used, int *f, int *t
                 f[v0]=min(t[to], f[v0]);
             }
             else {
-                dfs (to, v0, v, g, used, f, t, timer);
+                DFS_cutpoints (to, v0, v, g, used, f, t, timer);
                 f[v0]=min(f[v0], f[to]);
                 if (f[to]>=t[v0] && p!=-1) {
                     add_c (v0);
@@ -70,7 +70,7 @@ void DFS_bridges (int v0, int p=-1, int v, int **g, bool *used, int *f, int *t, 
                 f[v0]=min(t[to], f[v0]);
             }
             else {
-                dfs (to, v0, v, g, used, f, t, timer);
+                DFS_bridges (to, v0, v, g, used, f, t, timer);
                 f[v0]=min(f[v0], f[to]);
                 if (f[to]>t[v0]) {
                     add_br(v0, to);
