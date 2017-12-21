@@ -10,7 +10,7 @@ void Ford_Bellman (int v, int e, int **arr, vector <int> p, int *cost) {
     for (int i=0; i<v-1; i++) {
 	for (int j=0; j<e; j++) {
 		if (p[arr[j][0]]<inf) {
-			p[arr[j][1]]=min (p[arr[j][0]], p[arr[j][0]]+cost[j]);
+			p[arr[j][1]]=min (p[arr[j][1]], p[arr[j][0]]+cost[j]);
 		}
 	}
     }
@@ -33,6 +33,9 @@ int main() {
         cin>>cost[i];
     }
     vector <int> p (v);
+    for (int i=0; i<v; i++) {
+    p[i]=inf;
+}
     Ford_Bellman (0, v, e, arr, p, cost);
     return 0;
 }
