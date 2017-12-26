@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector> 
+
+using namespace std;
+
+const int inf=1000000;
+
+void list (int v, int **arr, vector<vector<int> >& l, vector <vector<int>> c, int *cost) {
+    for(int i=0; i<v; i++) {
+        l[arr[i][0]].push_back(arr[i][1]);
+        l[arr[i][1]].push_back(arr[i][0]);
+        c[arr[i][0]].push_back(cost[i]);
+        c[arr[i][1]].push_back(cost[i]);
+    }
+}
+
+void Dijkstra (int v, vector <vector<int>> g, bool *used, vector <vector<int>> c) {
+  vector<int> d(v, inf);  
+	d[0]=0;
+	int t=0;
+	for (int i=0; i<v; i++) {
+		t=-1;
+		for (int j=0; j<v; j++) {
+			if ((used[j]==0) && (t==-1 || d[j]<d[t])) {
+				t=j;
+			}
+		}
+		if (d[t]==inf) {
+			break;
+		}
+		used[t]=1;
+		for (int w=0; w<g[t].size(); w++) {
+			if (d[g[t][w]]>d[t]+c[t][w]) {
+				d[g[t][w]]=d[t]+c[t][w];
+			}
+		}
+	}
+}
+ 
+int main() {
+	int e,v; //количество ребер, вершин
+    cin>>e>>v;
+    int **arr=new int* [e];
+    int *cost=new int [e];
+    for (int i=0; i<e; i++) {
+        arr[i]=new int [2];
+    }
+    for (int i=0; i<e; i++) {
+        cin>>arr[i][0]>>arr[i][1];
+        cin>>cost[i];
+    }
+    vector <vector <int>> g;
+    vector <vector<int>> c;
+    list (v, arr, g, c, cost);
+    bool *used=new bool[v];
+    for (int i=0; i<v; i++) {
+        used[i]=0;
+    }
+    Dijkstra (v, g, used, c);
+    return 0;
+}
