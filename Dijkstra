@@ -14,8 +14,7 @@ void list (int v, int **arr, vector<vector<int> >& l, vector <vector<int>> c, in
     }
 }
 
-void Dijkstra (int v, vector <vector<int>> g, bool *used, vector <vector<int>> c) {
-        vector<int> d(v, inf);  
+void Dijkstra (int v, vector <vector<int>> g, vector <int> d, bool *used, vector <vector<int>> c) {  
 	d[0]=0;
 	int t=0;
 	for (int i=0; i<v; i++) {
@@ -56,6 +55,7 @@ int main() {
     for (int i=0; i<v; i++) {
         used[i]=0;
     }
-    Dijkstra (v, g, used, c);
+    vector<int> d (v, inf);
+    Dijkstra (v, g, d, used, c);
     return 0;
 }
